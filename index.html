@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zain ul Wara — Travel Video Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --sun:#f5a623;
+  --sky:#1e7fcb;
+  --leaf:#2eb87a;
+  --coral:#f25c3b;
+  --sand:#fdf6ec;
+  --dark:#1a1a1a;
+  --mid:#4a4a4a;
+  --soft:#8a8a8a;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--dark);overflow-x:hidden;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.1rem 4rem;
+  background:rgba(255,255,255,0.92);
+  border-bottom:1px solid rgba(26,26,26,0.08);
+  backdrop-filter:blur(16px);
+}
+.logo{
+  font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;
+  color:var(--dark);letter-spacing:-0.02em;
+}
+.logo span{color:var(--coral);}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{
+  text-decoration:none;color:var(--mid);
+  font-size:0.85rem;font-weight:500;transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--coral);}
+.nav-btn{
+  background:var(--coral);color:var(--white);
+  padding:10px 24px;border-radius:100px;
+  font-size:0.82rem;font-weight:600;
+  text-decoration:none;transition:all 0.2s;
+  box-shadow:0 4px 14px rgba(242,92,59,0.3);
+}
+.nav-btn:hover{background:#d94e30;transform:translateY(-1px);}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  background:var(--sand);
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:7rem 4rem 4rem;
+  position:relative;overflow:hidden;
+}
+.hero-shapes{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.shape{position:absolute;border-radius:50%;}
+.s1{width:500px;height:500px;background:rgba(245,166,35,0.12);top:-100px;right:-100px;}
+.s2{width:300px;height:300px;background:rgba(242,92,59,0.08);bottom:-50px;left:200px;}
+.s3{width:200px;height:200px;background:rgba(30,127,203,0.08);top:200px;right:300px;}
+
+.hero-left{position:relative;z-index:1;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(242,92,59,0.1);color:var(--coral);
+  font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  padding:7px 16px;border-radius:100px;margin-bottom:1.75rem;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--coral);animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+h1{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(3rem,5.5vw,5.5rem);
+  line-height:1.0;letter-spacing:-0.03em;
+  color:var(--dark);margin-bottom:1.5rem;
+}
+h1 .line-accent{
+  color:var(--coral);font-style:italic;
+}
+h1 .line-blue{color:var(--sky);}
+
+.hero-desc{
+  font-size:1.05rem;color:var(--mid);line-height:1.75;
+  max-width:480px;margin-bottom:2.5rem;font-weight:300;
+}
+
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+.btn-primary{
+  background:var(--coral);color:var(--white);
+  padding:15px 32px;border-radius:100px;
+  font-size:0.88rem;font-weight:600;
+  text-decoration:none;transition:all 0.2s;display:inline-block;
+  box-shadow:0 6px 20px rgba(242,92,59,0.35);
+}
+.btn-primary:hover{background:#d94e30;transform:translateY(-2px);}
+.btn-secondary{
+  background:transparent;color:var(--dark);
+  padding:14px 32px;border-radius:100px;
+  border:1.5px solid rgba(26,26,26,0.2);
+  font-size:0.88rem;font-weight:500;
+  text-decoration:none;transition:all 0.2s;display:inline-block;
+}
+.btn-secondary:hover{border-color:var(--sky);color:var(--sky);}
+
+.hero-proof{
+  display:flex;align-items:center;gap:1.5rem;
+  margin-top:2.5rem;padding-top:2rem;
+  border-top:1px solid rgba(26,26,26,0.1);
+}
+.proof-stat{}
+.proof-num{
+  font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;
+  color:var(--dark);line-height:1;
+}
+.proof-label{font-size:0.72rem;color:var(--soft);margin-top:2px;}
+.proof-divider{width:1px;height:36px;background:rgba(26,26,26,0.1);}
+
+.hero-right{
+  display:flex;flex-direction:column;gap:1rem;
+  position:relative;z-index:1;padding-left:3rem;
+}
+.platform-pill{
+  display:flex;align-items:center;gap:14px;
+  background:var(--white);
+  border-radius:16px;padding:1.1rem 1.5rem;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+  transition:transform 0.2s,box-shadow 0.2s;
+  animation:floatIn 0.6s ease both;
+}
+.platform-pill:hover{transform:translateX(6px);box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+.platform-pill:nth-child(1){animation-delay:0.1s;}
+.platform-pill:nth-child(2){animation-delay:0.2s;margin-left:2rem;}
+.platform-pill:nth-child(3){animation-delay:0.3s;}
+.platform-pill:nth-child(4){animation-delay:0.4s;margin-left:2rem;}
+.platform-pill:nth-child(5){animation-delay:0.5s;}
+@keyframes floatIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.pill-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:700;letter-spacing:0.05em;flex-shrink:0;
+}
+.icon-ig{background:rgba(242,92,59,0.1);color:var(--coral);}
+.icon-tt{background:rgba(26,26,26,0.07);color:var(--dark);}
+.icon-fb{background:rgba(30,127,203,0.1);color:var(--sky);}
+.icon-yt{background:rgba(242,92,59,0.1);color:var(--coral);}
+.icon-pt{background:rgba(46,184,122,0.1);color:var(--leaf);}
+.pill-info{}
+.pill-name{font-size:0.9rem;font-weight:600;color:var(--dark);}
+.pill-spec{font-size:0.75rem;color:var(--soft);margin-top:1px;}
+
+/* TICKER */
+.ticker{
+  background:var(--dark);
+  padding:1rem 0;overflow:hidden;
+}
+.ticker-track{
+  display:flex;gap:2.5rem;width:max-content;
+  animation:slide 22s linear infinite;
+}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);white-space:nowrap;
+}
+.ticker-star{color:var(--sun);font-size:0.6rem;}
+
+/* SERVICES */
+.services{padding:7rem 4rem;background:var(--white);}
+.section-header{text-align:center;margin-bottom:4rem;}
+.section-eyebrow{
+  display:inline-block;
+  font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--leaf);margin-bottom:1rem;
+}
+h2{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(2.2rem,4vw,3.8rem);
+  letter-spacing:-0.03em;line-height:1.05;
+  color:var(--dark);margin-bottom:0.75rem;
+}
+.section-sub{font-size:1rem;color:var(--mid);font-weight:300;max-width:520px;margin:0 auto;line-height:1.7;}
+
+.services-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+}
+.svc{
+  background:var(--sand);border-radius:24px;
+  padding:2.25rem 2rem;
+  transition:transform 0.25s,box-shadow 0.25s;
+  position:relative;overflow:hidden;
+}
+.svc::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:120px;height:120px;border-radius:50%;
+  opacity:0.35;transition:opacity 0.3s;
+}
+.svc:nth-child(1)::before{background:var(--coral);}
+.svc:nth-child(2)::before{background:var(--sun);}
+.svc:nth-child(3)::before{background:var(--sky);}
+.svc:nth-child(4)::before{background:var(--leaf);}
+.svc:nth-child(5)::before{background:var(--coral);}
+.svc:nth-child(6)::before{background:var(--sun);}
+.svc:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.1);}
+.svc:hover::before{opacity:0.5;}
+
+.svc-num{
+  font-family:'Fraunces',serif;font-weight:900;font-size:1rem;
+  color:var(--coral);margin-bottom:1.25rem;opacity:0.6;
+}
+.svc-title{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:1.25rem;color:var(--dark);
+  margin-bottom:0.6rem;letter-spacing:-0.02em;
+}
+.svc-desc{font-size:0.85rem;color:var(--mid);line-height:1.7;font-weight:300;}
+.svc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:1.25rem;}
+.stag{
+  font-size:0.68rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+  padding:4px 12px;border-radius:100px;
+  background:rgba(26,26,26,0.07);color:var(--mid);
+}
+
+/* BOOK */
+.book{
+  padding:7rem 4rem;
+  background:var(--sand);
+  position:relative;overflow:hidden;
+}
+.book-bg-shapes{position:absolute;inset:0;pointer-events:none;}
+.bs1{position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(245,166,35,0.1);top:-100px;right:-100px;}
+.bs2{position:absolute;width:250px;height:250px;border-radius:50%;background:rgba(30,127,203,0.08);bottom:-60px;left:100px;}
+
+.book-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:start;position:relative;z-index:1;
+}
+.book-left{}
+.book-eyebrow{
+  font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--coral);margin-bottom:1rem;display:block;
+}
+.book-left h2{text-align:left;margin-bottom:1rem;}
+.book-left p{font-size:0.95rem;color:var(--mid);line-height:1.75;font-weight:300;margin-bottom:2rem;}
+
+.links-stack{display:flex;flex-direction:column;gap:0.75rem;}
+.ext-link{
+  display:flex;align-items:center;gap:14px;
+  background:var(--white);border-radius:16px;padding:1rem 1.25rem;
+  text-decoration:none;transition:all 0.2s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+.ext-link:hover{transform:translateX(4px);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
+.ext-ico{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:700;flex-shrink:0;
+}
+.ico-up{background:rgba(46,184,122,0.12);color:var(--leaf);}
+.ico-yt{background:rgba(242,92,59,0.1);color:var(--coral);}
+.ico-wa{background:rgba(46,184,122,0.12);color:var(--leaf);}
+.ext-text{}
+.ext-name{font-size:0.88rem;font-weight:600;color:var(--dark);}
+.ext-url{font-size:0.73rem;color:var(--soft);margin-top:1px;}
+
+.book-form{
+  background:var(--white);border-radius:28px;
+  padding:2.5rem;box-shadow:0 8px 40px rgba(0,0,0,0.08);
+}
+.form-title{
+  font-family:'Fraunces',serif;font-weight:700;font-size:1.4rem;
+  color:var(--dark);margin-bottom:1.75rem;letter-spacing:-0.02em;
+}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.f-group{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;}
+.f-label{font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--soft);}
+input,textarea,select{
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;
+  padding:11px 14px;
+  background:var(--sand);color:var(--dark);
+  border:1.5px solid transparent;border-radius:12px;outline:none;
+  transition:border-color 0.2s,background 0.2s;
+  width:100%;
+}
+input::placeholder,textarea::placeholder{color:var(--soft);}
+input:focus,textarea:focus,select:focus{border-color:var(--coral);background:var(--white);}
+select option{background:var(--white);}
+textarea{min-height:100px;resize:vertical;}
+.submit-btn{
+  width:100%;padding:14px;border-radius:100px;
+  background:var(--coral);color:var(--white);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.88rem;font-weight:600;
+  border:none;cursor:pointer;
+  transition:all 0.2s;margin-top:0.5rem;
+  box-shadow:0 6px 20px rgba(242,92,59,0.3);
+}
+.submit-btn:hover{background:#d94e30;transform:translateY(-1px);}
+
+/* FOOTER */
+footer{
+  background:var(--dark);padding:2rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+footer p{font-size:0.78rem;color:rgba(255,255,255,0.35);}
+footer span{color:var(--sun);}
+.footer-logo{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:1rem;color:var(--white);
+}
+.footer-logo em{color:var(--coral);font-style:normal;}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  .hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;}
+  .hero-right{padding-left:0;margin-top:2rem;}
+  .platform-pill:nth-child(even){margin-left:0;}
+  .services,.book{padding:4rem 1.5rem;}
+  .services-grid{grid-template-columns:1fr;}
+  .book-inner{grid-template-columns:1fr;}
+  .f-grid{grid-template-columns:1fr;}
+  footer{padding:1.5rem;flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Zain<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#book">Book a Call</a></li>
+  </ul>
+  <a href="#book" class="nav-btn">Get a Free Call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-shapes">
+    <div class="shape s1"></div>
+    <div class="shape s2"></div>
+    <div class="shape s3"></div>
+  </div>
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Available for new clients
+    </div>
+    <h1>
+      Your Travel<br>
+      <span class="line-accent">Stories,</span><br>
+      <span class="line-blue">Beautifully</span><br>
+      Edited.
+    </h1>
+    <p class="hero-desc">
+      Hi, I'm <strong>Zain ul Wara</strong> — a video editor who turns raw travel footage into scroll-stopping content for vloggers and nomads posting daily on every platform.
+    </p>
+    <div class="hero-actions">
+      <a href="#book" class="btn-primary">Schedule a Free Call</a>
+      <a href="#services" class="btn-secondary">See My Services</a>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-stat">
+        <div class="proof-num">50+</div>
+        <div class="proof-label">Projects done</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">24hr</div>
+        <div class="proof-label">Avg turnaround</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">5</div>
+        <div class="proof-label">Platforms</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="platform-pill">
+      <div class="pill-icon icon-ig">IG</div>
+      <div class="pill-info">
+        <div class="pill-name">Instagram Reels</div>
+        <div class="pill-spec">9:16 · Hook in 1s · Up to 90s</div>
+      </div>
+    </div>
+    <div class="platform-pill">
+      <div class="pill-icon icon-tt">TT</div>
+      <div class="pill-info">
+        <div class="pill-name">TikTok Videos</div>
+        <div class="pill-spec">Trend-native · Fast cuts · Viral pacing</div>
+      </div>
+    </div>
+    <div class="platform-pill">
+      <div class="pill-icon icon-fb">FB</div>
+      <div class="pill-info">
+        <div class="pill-name">Facebook Reels</div>
+        <div class="pill-spec">Captioned · Autoplay-optimised</div>
+      </div>
+    </div>
+    <div class="platform-pill">
+      <div class="pill-icon icon-yt">YT</div>
+      <div class="pill-info">
+        <div class="pill-name">YouTube Vlogs</div>
+        <div class="pill-spec">Long-form · Retention edited · 16:9</div>
+      </div>
+    </div>
+    <div class="platform-pill">
+      <div class="pill-icon icon-pt">PT</div>
+      <div class="pill-info">
+        <div class="pill-name">Patreon Exclusives</div>
+        <div class="pill-spec">Premium BTS · Community content</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-star">★</span> Instagram Reels</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> TikTok Videos</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Facebook Reels</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> YouTube Vlogs</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Patreon Content</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Daily Posting</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Upwork Verified</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> YT Jobs Available</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Fast Turnaround</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Instagram Reels</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> TikTok Videos</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Facebook Reels</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> YouTube Vlogs</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Patreon Content</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Daily Posting</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Upwork Verified</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> YT Jobs Available</div>
+    <div class="ticker-item"><span class="ticker-star">★</span> Fast Turnaround</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <div class="section-header">
+    <div class="section-eyebrow">What I do</div>
+    <h2>Everything a Travel Creator<br>Actually Needs</h2>
+    <p class="section-sub">From daily reels to cinematic vlogs — built for nomads who can't slow down.</p>
+  </div>
+  <div class="services-grid">
+    <div class="svc">
+      <div class="svc-num">01</div>
+      <div class="svc-title">Travel Vlog Editing</div>
+      <div class="svc-desc">Full-length YouTube vlogs with cinematic cuts, colour grading, music sync and captions. Edited for retention — keeping viewers watching till the end.</div>
+      <div class="svc-tags">
+        <span class="stag">YouTube</span>
+        <span class="stag">Long-form</span>
+        <span class="stag">Colour grade</span>
+      </div>
+    </div>
+    <div class="svc">
+      <div class="svc-num">02</div>
+      <div class="svc-title">Short-Form Reels</div>
+      <div class="svc-desc">Hook-driven vertical reels for Instagram, TikTok and Facebook. Trending audio, text overlays, and fast pacing — optimised natively per platform.</div>
+      <div class="svc-tags">
+        <span class="stag">Instagram</span>
+        <span class="stag">TikTok</span>
+        <span class="stag">Facebook</span>
+      </div>
+    </div>
+    <div class="svc">
+      <div class="svc-num">03</div>
+      <div class="svc-title">Daily Content Package</div>
+      <div class="svc-desc">Built for creators who post every day. Bulk editing with consistent brand style, rapid delivery, and a retainer model so you never miss a post.</div>
+      <div class="svc-tags">
+        <span class="stag">Daily posting</span>
+        <span class="stag">Bulk editing</span>
+        <span class="stag">Retainer</span>
+      </div>
+    </div>
+    <div class="svc">
+      <div class="svc-num">04</div>
+      <div class="svc-title">Patreon Exclusives</div>
+      <div class="svc-desc">Behind-the-scenes edits and extended cuts for your Patreon community. Higher quality, more personal storytelling for your most loyal fans.</div>
+      <div class="svc-tags">
+        <span class="stag">Patreon</span>
+        <span class="stag">BTS content</span>
+        <span class="stag">Community</span>
+      </div>
+    </div>
+    <div class="svc">
+      <div class="svc-num">05</div>
+      <div class="svc-title">Brand Style Kit</div>
+      <div class="svc-desc">Custom intro/outro animations, lower thirds, colour LUT presets and text templates. One visual identity across all your platforms and every video.</div>
+      <div class="svc-tags">
+        <span class="stag">Branding</span>
+        <span class="stag">Templates</span>
+        <span class="stag">LUTs</span>
+      </div>
+    </div>
+    <div class="svc">
+      <div class="svc-num">06</div>
+      <div class="svc-title">Captions & Subtitles</div>
+      <div class="svc-desc">Animated captions and multi-language subtitles. Boost accessibility and watch time on muted autoplay feeds — essential for every platform in 2026.</div>
+      <div class="svc-tags">
+        <span class="stag">Subtitles</span>
+        <span class="stag">Accessibility</span>
+        <span class="stag">Multi-lang</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK A CALL -->
+<section id="book" class="book">
+  <div class="book-bg-shapes">
+    <div class="bs1"></div>
+    <div class="bs2"></div>
+  </div>
+  <div class="book-inner">
+    <div class="book-left">
+      <span class="book-eyebrow">Let's work together</span>
+      <h2>Book a Free<br>Discovery Call</h2>
+      <p>Fill in the form and I'll send you a calendar link. During the call I'll walk you through my full portfolio and we'll find the perfect package for your content style and posting schedule.</p>
+      <div class="links-stack">
+        <a href="https://www.upwork.com" target="_blank" class="ext-link">
+          <div class="ext-ico ico-up">UP</div>
+          <div class="ext-text">
+            <div class="ext-name">Find me on Upwork</div>
+            <div class="ext-url">upwork.com/freelancers/zainulwara</div>
+          </div>
+        </a>
+        <a href="https://www.youtube.com/hiring" target="_blank" class="ext-link">
+          <div class="ext-ico ico-yt">YT</div>
+          <div class="ext-text">
+            <div class="ext-name">Hire via YT Jobs</div>
+            <div class="ext-url">YouTube Creator Jobs listing</div>
+          </div>
+        </a>
+        <a href="https://wa.me/923001234567" target="_blank" class="ext-link">
+          <div class="ext-ico ico-wa">WA</div>
+          <div class="ext-text">
+            <div class="ext-name">WhatsApp me directly</div>
+            <div class="ext-url">Quick reply · Usually within 1 hour</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="book-form">
+      <div class="form-title">Tell me about your content</div>
+      <div class="f-grid">
+        <div class="f-group">
+          <label class="f-label">Your Name</label>
+          <input type="text" placeholder="Alex Johnson">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Email</label>
+          <input type="email" placeholder="alex@travel.com">
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Your handle (any platform)</label>
+        <input type="text" placeholder="@yourtravelhandle">
+      </div>
+      <div class="f-group">
+        <label class="f-label">Platforms you post on</label>
+        <select>
+          <option value="">Select your main platform...</option>
+          <option>Instagram Reels</option>
+          <option>TikTok</option>
+          <option>YouTube</option>
+          <option>Facebook Reels</option>
+          <option>All of the above</option>
+        </select>
+      </div>
+      <div class="f-group">
+        <label class="f-label">How many videos per week?</label>
+        <select>
+          <option value="">Select posting frequency...</option>
+          <option>1–3 videos / week</option>
+          <option>4–7 videos / week (daily)</option>
+          <option>Multiple per day</option>
+        </select>
+      </div>
+      <div class="f-group">
+        <label class="f-label">About your content & style</label>
+        <textarea placeholder="Where do you travel? What vibe are you going for? Any editors or styles you love?"></textarea>
+      </div>
+      <button class="submit-btn">Request a Discovery Call</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Zain ul Wara<em>.</em></div>
+  <p>Travel Video Editor · Karachi, Pakistan</p>
+  <p>Available on <span>Upwork</span> &amp; <span>YT Jobs</span></p>
+</footer>
+
+</body>
+</html>
