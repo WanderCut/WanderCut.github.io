@@ -332,6 +332,86 @@ footer span{color:var(--sun);}
 }
 </style>
 </head>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const btn = document.querySelector(".submit-btn");
+  if (!btn) return;
+
+  btn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const inputs = document.querySelectorAll("input");
+    const selects = document.querySelectorAll("select");
+    const textarea = document.querySelector("textarea");
+
+    // FIXED: Using exact property names that match your Apps Script + Sheet headers
+    const data = {
+      Name:      inputs[0].value.trim(),
+      Email:     inputs[1].value.trim(),
+      Handle:    inputs[2].value.trim(),
+      Platform:  selects[0].value,
+      Frequency: selects[1].value,
+      Details:   textarea.value.trim()
+    };
+
+    // Basic validation
+    if (!data.Name || !data.Email) {
+      alert("Please enter your Name and Email.");
+      return;
+    }
+
+    const originalText = btn.innerText;
+    btn.innerText = "Sending...";
+    btn.disabled = true;
+    btn.style.opacity = "0.8";
+
+    try {
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbzXQFkeXescazUlL4ADwUCkdIlPilDtR7-1yiZ6UNVy8JgYT1WMXY6TMfbgftGlU-7f/exec";
+
+      // Send as form data instead of JSON (this avoids most CORS preflight issues)
+      const formData = new URLSearchParams();
+      formData.append("Name", data.Name);
+      formData.append("Email", data.Email);
+      formData.append("Handle", data.Handle);
+      formData.append("Platform", data.Platform);
+      formData.append("Frequency", data.Frequency);
+      formData.append("Details", data.Details);
+
+      const response = await fetch(scriptUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData,
+        redirect: "follow"
+      });
+
+      const responseText = await response.text();
+      console.log("Server response:", responseText);
+
+      btn.innerText = "Request Sent ✓";
+
+      // Clear form
+      inputs.forEach(input => input.value = "");
+      selects.forEach(select => select.selectedIndex = 0);
+      textarea.value = "";
+
+    } catch (error) {
+      console.error("Fetch Error:", error);
+      btn.innerText = "Try Again";
+      alert("Failed to send. Check console for details.");
+    }
+
+    // Reset button after 3 seconds
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    }, 3000);
+  });
+});
+</script>
 <body>
 
 <nav>
