@@ -130,8 +130,14 @@ h1 .line-blue{color:var(--sky);}
 .showreel .section-eyebrow{color:var(--coral);}
 .showreel h2{color:var(--white);margin-bottom:0.75rem;}
 .showreel .section-sub{color:rgba(255,255,255,0.45);margin-bottom:2.5rem;}
-.reel-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:20px;overflow:hidden;max-width:880px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,0.5);}
+.reel-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:20px;overflow:hidden;max-width:880px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,0.5);cursor:pointer;}
 .reel-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+.reel-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+.reel-wrap:hover .reel-thumb{transform:scale(1.03);}
+.reel-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;}
+.reel-play-btn{width:80px;height:80px;border-radius:50%;background:rgba(242,92,59,0.92);display:flex;align-items:center;justify-content:center;transition:transform 0.2s,background 0.2s;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+.reel-wrap:hover .reel-play-btn{transform:scale(1.1);background:var(--coral);}
+.reel-play-btn svg{margin-left:5px;}
 
 /* SECTION COMMON */
 .section-header{text-align:center;margin-bottom:3.5rem;}
@@ -549,15 +555,17 @@ footer span{color:var(--sun);}
     <h2 style="color:white;">See It in Action</h2>
     <p class="section-sub">Real edits. Real travel footage. See exactly what your content could look like.</p>
   </div>
-  <div class="reel-wrap reveal">
-    <!-- REPLACE PASTE_YOUR_YOUTUBE_VIDEO_ID with your actual YouTube video ID -->
-    <iframe
-      src="https://www.youtube.com/embed/qmb0q5b0wAw?rel=0&modestbranding=1"
-      title="WanderCut Showreel"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
+  <div class="reel-wrap reveal" id="reelWrap">
+    <img
+      class="reel-thumb"
+      src="https://img.youtube.com/vi/qmb0q5b0wAw/maxresdefault.jpg"
+      alt="WanderCut Showreel thumbnail"
       loading="lazy">
-    </iframe>
+    <div class="reel-play">
+      <div class="reel-play-btn">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1116,6 +1124,11 @@ function showFlow(key){
     });
   }, 250);
 }
+
+// ── SHOWREEL CLICK-TO-PLAY ──
+document.getElementById('reelWrap').addEventListener('click', function(){
+  this.innerHTML = '<iframe src="https://www.youtube.com/embed/qmb0q5b0wAw?rel=0&modestbranding=1&autoplay=1" title="WanderCut Showreel" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>';
+});
 
 chatToggle.addEventListener('click', () => {
   const isOpen = chatBubble.classList.toggle('open');
