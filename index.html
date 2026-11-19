@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -1171,19 +1171,24 @@ document.getElementById('exitSkip').addEventListener('click', () => { exitOverla
 exitOverlay.addEventListener('click', e => { if(e.target === exitOverlay){ exitOverlay.classList.remove('show'); sessionStorage.setItem('wc-exit','1'); }});
 
 document.getElementById('exitSend').addEventListener('click', async () => {
-  const val = document.getElementById('exitEmail').value.trim();
-  if(!val){ document.getElementById('exitEmail').focus(); return; }
+  const emailInput = document.getElementById('exitEmail');
+  const val = emailInput.value.trim();
+  if(!val || !val.includes('@')){ emailInput.focus(); return; }
   const btn = document.getElementById('exitSend');
   btn.textContent = 'Sending…';
   btn.disabled = true;
   try {
     const formData = new URLSearchParams();
-    formData.append('Name', 'Exit Popup Lead');
+    formData.append('sheetName', 'Exit pop-up');
+    formData.append('Sheet', 'Exit pop-up');
+    formData.append('sheet', 'Exit pop-up');
+    formData.append('tab', 'Exit pop-up');
     formData.append('Email', val);
-    formData.append('Handle', '');
+    formData.append('Name', 'Exit Popup Lead');
     formData.append('Platform', 'Exit Popup');
-    formData.append('Frequency', '');
     formData.append('Details', 'Requested 12-Step Travel Vlog Checklist');
+    formData.append('Date', new Date().toLocaleString());
+    formData.append('Timestamp', new Date().toISOString());
     await fetch('https://script.google.com/macros/s/AKfycbzXQFkeXescazUlL4ADwUCkdIlPilDtR7-1yiZ6UNVy8JgYT1WMXY6TMfbgftGlU-7f/exec',
       {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData,redirect:'follow'});
     btn.textContent = 'Sent ✓';
